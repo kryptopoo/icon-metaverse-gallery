@@ -1,0 +1,74 @@
+<mat-toolbar class="mat-elevation-z6" color="primary">
+  <mat-toolbar-row>
+    <button mat-icon-button>
+      <!-- <mat-icon (click)="sidenav.toggle()">menu</mat-icon> -->
+    </button>
+    <h1 [routerLink]="'/'" style="cursor: pointer;">ICON Metaverse Gallery</h1>
+    <span class="menu-spacer"></span>
+    <div>
+      <a mat-button [routerLink]="'/galleries'" routerLinkActive="active"> Galleries </a>
+      <a mat-button [routerLink]="'/rooms'" routerLinkActive="active"> Rooms For Rent </a>
+      <a mat-button [routerLink]="'/artworks'" routerLinkActive="active"> Artworks </a>
+      <a mat-button [routerLink]="'/about'" routerLinkActive="active"> About </a>
+    </div>
+
+    <span style="flex: 1 1 auto;"></span>
+    <div *ngIf="myWallet != null" class="wallet-info">
+      <div class="wallet-address">
+        <button mat-flat-button color="primary"
+          (click)="openDisconnectWalletDialog()">{{myAddress}} ({{myBalance.toFixed(2)}} ICX)</button>
+      </div>
+      
+    </div>
+    <div *ngIf="myWallet == null">
+      <button mat-flat-button color="primary" (click)="openConnectWalletDialog()">Connect Wallet</button>
+    </div>
+
+
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<ng-template #connectWalletDialogRef>
+  <div>
+    <h2 mat-dialog-title>Connect Wallet</h2>
+    <mat-dialog-content>
+
+      <div>
+        You don't have wallet. <a href="#" onclick="return false" (click)="createNewWallet()">Click here to create new wallet</a>
+      </div>
+
+      <!-- should be removed -->
+      <div class="mt-4">
+        <div>private key 1: <strong> 573b555367d6734ea0fecd0653ba02659fa19f7dc6ee5b93ec781350bda27376</strong></div>
+        <div>private key 2: <strong> 8457c703c32a00903fc31a03b834dac33c6a73c2013fe36444ac278f273edfbb</strong></div>
+        <div>private key 3: <strong> 0eb32938607e1030e10ed7994e9f05ca3d3772c56cdbe1119291b92048243cd9</strong></div>
+        
+      </div>
+    
+
+      <mat-form-field fxFlexFill class="mt-4">
+        <mat-label>Private key</mat-label>
+        <input matInput [(ngModel)]="privateKey" placeholder="import your private key here...">
+      </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-flat-button [mat-dialog-close]="'connect'" color="primary" cdkFocusInitial>Connect</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+<ng-template #disconnectWalletDialogRef>
+  <div>
+    <h2 mat-dialog-title>Disconnect Wallet</h2>
+    <mat-dialog-content>
+      <div class="mt-2">Address: <strong> {{myWallet.getAddress()}}</strong></div>
+      <div class="mt-2">Balance: <strong>{{myBalance}}</strong> ICX</div>
+      <div class="mt-4">Are you sure you want to disconnect the wallet?</div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-flat-button [mat-dialog-close]="'disconnect'" color="warn" cdkFocusInitial>Disconnect</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

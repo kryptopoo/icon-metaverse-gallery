@@ -1,0 +1,76 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<div class="content">
+    <div fxLayout="row" fxLayoutAlign="end center" *ngIf="canMint()">
+        <button layout-align="center" mat-stroked-button (click)="dialog.open(mintArtworkDialogRef)">
+            <mat-icon>add_photo_alternate</mat-icon>
+            Mint Artwork
+        </button>
+    </div>
+    <div class="grid-content">
+        <div fxLayout="row wrap" fxLayoutGap="16px grid">
+            <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let artwork of myArtworks">
+                <mat-card *ngIf="!artwork.isLoading">
+                    <mat-card-header>
+                        <div mat-card-avatar>
+                            <mat-icon class="avatar">account_circle</mat-icon>
+                        </div>
+                        <mat-card-title>{{artwork.name}}</mat-card-title>
+                        <mat-card-subtitle>{{artwork.owner}}</mat-card-subtitle>
+                    </mat-card-header>
+                    <img mat-card-image [src]="artwork.image.normal" />
+                    <mat-card-content>
+                        {{artwork.description}}
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-button>SHARE</button>
+                    </mat-card-actions>
+                </mat-card>
+                <mat-card *ngIf="artwork.isLoading">
+                    <mat-card-header>
+                        <div mat-card-avatar>
+                            <mat-icon class="avatar">account_circle</mat-icon>
+                        </div>
+                    </mat-card-header>
+                    <div class="card-loading" fxLayout="row" fxLayoutAlign="center center">
+                        <mat-progress-bar mode="buffer"></mat-progress-bar>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #mintArtworkDialogRef>
+    <div>
+        <h2 mat-dialog-title>Mint Artwork</h2>
+        <mat-dialog-content>
+            <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="1rem">
+                <div class="mt-6">
+                    <mat-form-field fxFlexFill>
+                        <mat-label>Name</mat-label>
+                        <input matInput required [(ngModel)]="newArtwork.name" />
+                        <mat-error>This field is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlexFill class="mt-4">
+                        <mat-label>Description</mat-label>
+                        <textarea rows="4" matInput [(ngModel)]="newArtwork.description"></textarea>
+                    </mat-form-field>
+                </div>
+                <div (click)="newArtworkImageFile.click()">
+                    <img [src]="newArtwork.imageFilePath" class="preview-image" />
+
+                    <input #newArtworkImageFile (change)="imageHelper.selectImageFile($event, newArtwork)" type="file"
+                        accept="image/png, image/jpeg" style="display: none" />
+                </div>
+            </div>
+
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Cancel</button>
+            <button mat-flat-button color="primary" [mat-dialog-close]="true" cdkFocusInitial
+                [disabled]="!newArtwork.name || !newArtwork.imageFilePath" (click)="mintArtworkNft()">Mint</button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>

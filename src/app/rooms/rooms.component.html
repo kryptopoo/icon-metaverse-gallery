@@ -1,0 +1,139 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<div class="content">
+    <div *ngIf="canMint()" fxLayout="row" fxLayoutAlign="end center">
+        <button layout-align="center" mat-stroked-button (click)="dialog.open(mintRoomDialogRef)">
+            <mat-icon>add_to_queue</mat-icon>
+            Mint Room
+        </button>
+    </div>
+
+    <div class="grid-content">
+        <div fxLayout="row wrap" fxLayoutGap="16px grid">
+            <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let room of rooms">
+                <mat-card *ngIf="!room.isLoading">
+                    <mat-card-header>
+                        <div mat-card-avatar>
+                            <mat-icon class="avatar">account_circle</mat-icon>
+                        </div>
+                        <mat-card-title>{{ room.name }}</mat-card-title>
+                        <mat-card-subtitle>{{ room.owner }}</mat-card-subtitle>
+                    </mat-card-header>
+
+                    <img mat-card-image [src]="room.image.normal" />
+                    <mat-card-content>
+                        {{ room.description }}
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <div fxLayout="row" fxLayoutAlign="space-around center">
+                            <button *ngIf="room.price == null" fxFlex="100" mat-flat-button color="primary"
+                                (click)="dialog.open(registerRoomDialogRef); cloneRoom(registerRoom, room)">
+                                REGISTER FOR RENT
+                            </button>
+                            <button *ngIf="room.price > 0" fxFlex="100" mat-stroked-button disabled>FOR RENT {{
+                                room.price }} ICX</button>
+                        </div>
+                    </mat-card-actions>
+                </mat-card>
+                <mat-card *ngIf="room.isLoading">
+                    <mat-card-header>
+                        <div mat-card-avatar>
+                            <mat-icon class="avatar">account_circle</mat-icon>
+                        </div>
+                    </mat-card-header>
+                    <div class="card-loading" fxLayout="row" fxLayoutAlign="center center">
+                        <mat-progress-bar mode="buffer"></mat-progress-bar>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #vrViewRef>
+    <div>
+        <mat-dialog-content>
+            <iframe src="assets/static/vrview.html"></iframe>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Exit</button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>
+
+<ng-template #mintRoomDialogRef>
+    <div>
+        <h2 mat-dialog-title>Mint Room</h2>
+        <mat-dialog-content>
+            <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="1rem">
+                <div class="mt-6">
+                    <mat-form-field fxFlexFill>
+                        <mat-label>Name</mat-label>
+                        <input matInput required [(ngModel)]="newRoom.name" />
+                        <mat-error>This field is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlexFill class="mt-4">
+                        <mat-label>Description</mat-label>
+                        <textarea rows="4" matInput [(ngModel)]="newRoom.description"></textarea>
+                    </mat-form-field>
+                </div>
+                <div (click)="newRoomImageFile.click()">
+                    <img [src]="newRoom.imageFilePath" class="preview-image" />
+
+                    <input #newRoomImageFile (change)="imageHelper.selectImageFile($event, newRoom)" type="file"
+                        accept="image/png, image/jpeg" style="display: none" />
+                </div>
+            </div>
+
+            <mat-form-field fxFlexFill (click)="newRoomHtmlFile.click()" class="mt-2">
+                <mat-label>Template (.html)</mat-label>
+                <input matInput [(ngModel)]="newRoom.htmlFile.name" required readonly
+                    placeholder="browse html file..." />
+                <mat-error>This field is required</mat-error>
+                <input #newRoomHtmlFile (change)="fileHelper.selectHtmlFile($event, newRoom)" type="file" accept=".html"
+                    style="display: none" />
+            </mat-form-field>
+
+            <!-- <div class="file-select" (click)="newRoomHtmlFile.click()">
+                <button mat-flat-button color="primary">Choose Template File (.html)</button>
+                <input #newRoomHtmlFile (change)="fileHelper.selectHtmlFile($event, newRoom)" type='file' accept=".html"
+                    style="display:none" />
+            </div> -->
+
+            <!-- <div class="file-select" (click)="newRoomImageFile.click()">
+                <button mat-flat-button color="primary">Choose Image File</button>
+                <input #newRoomImageFile (change)="imageHelper.selectImageFile($event, newRoom)" type='file'
+                    accept="image/png, image/jpeg" style="display:none" />
+            </div>
+            <img [src]="newRoom.imageFilePath" class="preview-image" /> -->
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Cancel</button>
+            <button mat-flat-button color="primary" [mat-dialog-close]="true" cdkFocusInitial
+                [disabled]="!newRoom.name || !newRoom.imageFilePath || !newRoom.htmlFile.name" (click)="mintRoomNft()">
+                Mint
+            </button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>
+
+<ng-template #registerRoomDialogRef>
+    <div>
+        <h2 mat-dialog-title>Room For Rent</h2>
+        <mat-dialog-content>
+            <p>
+                You're about renting <strong>{{ registerRoom.name }} room</strong>
+            </p>
+            <p><img [src]="registerRoom.image.normal" /></p>
+            <mat-form-field fxFlexFill>
+                <mat-label>Price (ICX)</mat-label>
+                <input type="number" matInput [(ngModel)]="registerRoom.price" placeholder="ICX" />
+            </mat-form-field>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Cancel</button>
+            <button mat-flat-button color="primary" [mat-dialog-close]="true" cdkFocusInitial
+                (click)="registerForRent()">Register</button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>

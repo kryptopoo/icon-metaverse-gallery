@@ -1,0 +1,4 @@
+rootProject.name = 'icon-metaverse-gallery'
+include ('artwork-nft')
+include ('room-nft')
+include ('gallery')
