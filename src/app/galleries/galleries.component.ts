@@ -188,8 +188,8 @@ export class GalleriesComponent implements OnInit {
         console.log('gallery metadata uri', `${gallery.metadata}`);
 
         this.galleryViewUri = this.sanitizer.bypassSecurityTrustResourceUrl(
-            `${window.location.origin}/assets/templates/${gallery.room.template.split('/').pop()}?metadata=${gallery.metadata}`
-            //`${gallery.room.template}?metadata=${gallery.metadata}`
+            //`${window.location.origin}/assets/templates/${gallery.room.template.split('/').pop()}?metadata=${gallery.metadata}`
+            `${gallery.room.template}?metadata=${gallery.metadata}`
         );
         this.dialog.open(this.vrViewRef, {
             panelClass: 'fullscreen-dialog',

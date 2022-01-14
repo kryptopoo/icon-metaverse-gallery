@@ -41,10 +41,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
-import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxPicaModule } from '@bengchet/ngx-pica';
-import { NgxJdenticonModule } from "ngx-jdenticon";
 
 import { AboutComponent } from './about/about.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -95,9 +92,7 @@ import { HomeComponent } from './home/home.component';
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
-        ImageCropperModule,
         NgxPicaModule,
-        NgxJdenticonModule,
         FlexLayoutModule
         
     ],

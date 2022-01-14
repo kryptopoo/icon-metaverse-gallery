@@ -108,8 +108,7 @@ export class ArtworksComponent implements OnInit {
                     isLoading: false,
                     id: i,
                     name: metadata.name,
-                    //description: metadata.description,
-                    description: 'Lorem ipsum dolor sit amet...',
+                    description: metadata.description,
                     owner: this.iconServiceHelper.shortAddress(metadata.owner),
                     image: {
                         origin: this.ipfsService.buildUri(tokenUriResult, metadata.image.origin),

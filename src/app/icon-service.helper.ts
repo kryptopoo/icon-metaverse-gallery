@@ -8,14 +8,13 @@ import { environment } from '../environments/environment';
 })
 export class IconServiceHelper {
     iconService: IconService;
-
     // 1 ICX -> 1000000000000000000 conversion
     private value = IconService.IconAmount.of(1, IconService.IconAmount.Unit.ICX).toLoop();
     // You can use "governance score apis" to get step costs.
     //const stepLimit = await this.getDefaultStepCost();
     private stepLimit = IconService.IconConverter.toBigNumber('2000000');
     // networkId of node 1:mainnet, 2~:etc
-    private networkId = IconService.IconConverter.toBigNumber('3');
+    private networkId = IconService.IconConverter.toBigNumber(environment.iconNetworkId);
     private version = IconService.IconConverter.toBigNumber('3');
     // Timestamp is used to prevent the identical transactions. Only current time is required (Standard unit : us)
     // If the timestamp is considerably different from the current time, the transaction will be rejected.
