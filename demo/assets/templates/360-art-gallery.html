@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>360&deg; Art Gallery</title>
+  <meta name="description" content="360&deg; Art Gallery">
+  <script src="https://unpkg.com/aframe@1.2.0/dist/aframe-master.js"></script>
+  <script src="https://unpkg.com/aframe-event-set-component@5/dist/aframe-event-set-component.min.js"></script>
+  <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script>
+  <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script>
+  <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
+
+  <!-- Image link template to be reused. -->
+  <script id="link" type="text/html">
+      <a-entity class="link"
+        geometry="primitive: plane; height: 1; width: 1"
+        material="shader: flat; src: ${thumb}"
+		event-set__mousedown="scale: 1 1 1"
+		event-set__mouseup="scale: 1.2 1.2 1"
+        event-set__mouseenter="scale: 1.2 1.2 1"
+        event-set__mouseleave="scale: 1 1 1"
+        event-set__click="_target: #image-360; _delay: 300; material.src: ${src}"
+        proxy-event="event: click; to: #image-360; as: fade"
+        sound="on: click; src: #click-sound"></a-entity>
+    </script>
+
+  <script>
+    function loadTextures(urls) {
+      return new Promise((resolve, reject) => {
+        let textures = [];
+        let onLoad = function () {
+          resolve(textures);
+        };
+        let onProgress = function () { };
+        let onError = function (url) {
+          resolve(false);
+        };
+
+        let manager = new THREE.LoadingManager(onLoad, onProgress, onError);
+        for (let i = 0; i < urls.length; i++) {
+          let url = urls[i];
+          let loader = new THREE.TextureLoader(manager);
+          textures[i] = loader.load(url);
+          // console.log(`textures ${i}`, textures[i], url);
+        }
+      });
+    }
+  </script>
+
+  <script>
+    var url = document.location.href.split('metadata=')[1]
+    console.log('url', url)
+
+    // instantiate a loader
+    const loader = new THREE.TextureLoader();
+    fetch(url).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      console.log('data', data)
+
+      var assets = document.getElementById("assets");
+      var links = document.getElementById("links");
+
+      var imgUrls = [];
+      for (var i = 0; i < data.artworks.length; i++) {
+        imgUrls.push(data.artworks[i].image.origin);
+        imgUrls.push(data.artworks[i].image.thumbnail);
+      }
+
+      loadTextures(imgUrls).then((textures) => {
+        // console.log('textures', textures)
+        for (let t = 0; t < textures.length; t++) {
+          if (t % 2 == 0) {
+            // origin image
+            var img = document.createElement("img");
+            img.setAttribute("id", textures[t].uuid);
+            img.setAttribute("crossorigin", "anonymous");
+            img.setAttribute("src", textures[t].image.src);
+            assets.appendChild(img);
+          }
+          else {
+            // thumbnail image
+            var thumbImg = document.createElement("img");
+            thumbImg.setAttribute("id", textures[t].uuid);
+            thumbImg.setAttribute("crossorigin", "anonymous");
+            thumbImg.setAttribute("src", textures[t].image.src);
+            assets.appendChild(thumbImg);
+
+            var entity = document.createElement("a-entity");
+            entity.setAttribute("template", "src: #link");
+            entity.setAttribute("data-src", "#" + textures[t - 1].uuid);
+            entity.setAttribute("data-thumb", "#" + textures[t].uuid);
+            links.appendChild(entity);
+          }
+
+          // set default
+          if (t == 0) {
+            var image360 = document.getElementById("image-360");
+            image360.setAttribute("src", '#' + textures[t].uuid);
+          }
+        }
+      })
+
+    }).catch(function (err) {
+      console.log("fetch data error", err);
+    });
+  </script>
+
+</head>
+
+<body>
+  <a-scene>
+    <a-assets id="assets">
+      <audio id="click-sound" crossorigin="anonymous"
+        src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"></audio>
+    </a-assets>
+
+    <!-- 360-degree image. -->
+    <a-sky id="image-360" radius="10" src="#"
+      animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
+      animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade">
+    </a-sky>
+
+    <!-- Image links. -->
+    <a-entity id="links" layout="type: line; margin: 1.5" position="0 -1 -4">
+    </a-entity>
+
+    <!-- Camera + cursor. -->
+    <a-camera>
+      <a-cursor id="cursor" fuse="true" raycaster="objects:.link;" material="color: blue; shader: flat"
+        event-set__1="_event: mouseenter; color: springgreen" event-set__2="_event: mouseleave; color: blue">
+        <a-animation begin="click" easing="ease-in" attribute="scale" dur="150" fill="forwards" from="0.1 0.1 0.1"
+          to="1 1 1"></a-animation>
+        <a-animation begin="cursor-fusing" easing="ease-in" attribute="scale" dur="1500" fill="backwards" from="1 1 1"
+          to="0.1 0.1 0.1"></a-animation>
+      </a-cursor>
+    </a-camera>
+  </a-scene>
+</body>
+
+</html>
