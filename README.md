@@ -9,8 +9,10 @@ ICON Metaverse Gallery is virtual artwork gallery built on [ICON blockchain](htt
 
 [![ICON Metaverse Gallery Demo](https://img.youtube.com/vi/PtKPB7ko6pg/0.jpg)](https://www.youtube.com/watch?v=PtKPB7ko6pg)
 
+### Live Demo
+https://icon-metaverse-gallery.herokuapp.com
 
-**Screenshots**
+### Screenshots
 
 <img src="https://user-images.githubusercontent.com/44108463/149534790-a708b5f4-2963-4460-9f0f-24443cff12d2.png" width="800"/>
 
@@ -130,9 +132,8 @@ Get `scroreAddress` and configure as `galleryContract` in `environment.ts`
 ```
 
 ## Start
-
 - Run `npm install` for installing node modules
-- Run `npm start` for a dev server. Navigate to `http://localhost:4200/`
+- Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`
 
 
 

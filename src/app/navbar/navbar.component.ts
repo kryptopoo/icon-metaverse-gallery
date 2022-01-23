@@ -45,9 +45,7 @@ export class NavbarComponent implements OnInit {
     }
 
     openConnectWalletDialog() {
-        const dialog = this.dialog.open(this.connectWalletDialogRef, {
-            width: '60%'
-        });
+        const dialog = this.dialog.open(this.connectWalletDialogRef);
         dialog.afterClosed().subscribe((result) => {
             if (result === 'connect') {
                 const wallet = this.iconServiceHelper.loadWallet(this.privateKey);
@@ -82,5 +80,8 @@ export class NavbarComponent implements OnInit {
         });
     }
 
-    connectWallet() {}
+    openWalletDialog(){
+        if (this.myWallet != null) this.openDisconnectWalletDialog();
+        if (this.myWallet == null) this.openConnectWalletDialog();
+    }
 }

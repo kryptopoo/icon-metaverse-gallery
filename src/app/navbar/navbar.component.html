@@ -1,32 +1,44 @@
-<mat-toolbar class="mat-elevation-z6" color="primary">
-  <mat-toolbar-row>
-    <button mat-icon-button>
-      <!-- <mat-icon (click)="sidenav.toggle()">menu</mat-icon> -->
+<mat-toolbar class="mat-elevation-z10" color="primary" fxLayout="row">
+  <div fxFlex fxLayout="row" fxLayoutAlign="flex-start" fxHide.xs>
+    <h1 class="menu-home" [routerLink]="'/'" style="cursor: pointer;">ICON Metaverse Gallery</h1>
+    <ul fxLayout fxLayoutGap="0.5rem" class="menu-items">
+      <li><a mat-button [routerLink]="'/galleries'" routerLinkActive="active"> Galleries </a></li>
+      <li><a mat-button [routerLink]="'/rooms'" routerLinkActive="active"> Rooms For Rent </a></li>
+      <li><a mat-button [routerLink]="'/artworks'" routerLinkActive="active"> Artworks </a></li>
+      <li><a mat-button [routerLink]="'/about'" routerLinkActive="active"> About </a></li>
+    </ul>
+  </div>
+  <div fxFlex fxLayout="row" fxLayoutAlign="flex-end" fxHide.xs>
+    <button *ngIf="myWallet != null" mat-flat-button color="primary" (click)="openDisconnectWalletDialog()">
+      <mat-icon>account_balance_wallet</mat-icon>
+      <span>{{myAddress}}</span>
     </button>
-    <h1 [routerLink]="'/'" style="cursor: pointer;">ICON Metaverse Gallery</h1>
-    <span class="menu-spacer"></span>
-    <div>
-      <a mat-button [routerLink]="'/galleries'" routerLinkActive="active"> Galleries </a>
-      <a mat-button [routerLink]="'/rooms'" routerLinkActive="active"> Rooms For Rent </a>
-      <a mat-button [routerLink]="'/artworks'" routerLinkActive="active"> Artworks </a>
-      <a mat-button [routerLink]="'/about'" routerLinkActive="active"> About </a>
-    </div>
+    <button *ngIf="myWallet == null" mat-flat-button color="primary" (click)="openConnectWalletDialog()">
+      <mat-icon>account_balance_wallet</mat-icon>
+      <span>Connect Wallet</span>
+    </button>
+  </div>
 
-    <span style="flex: 1 1 auto;"></span>
-    <div *ngIf="myWallet != null" class="wallet-info">
-      <div class="wallet-address">
-        <button mat-flat-button color="primary"
-          (click)="openDisconnectWalletDialog()">{{myAddress}} ({{myBalance.toFixed(2)}} ICX)</button>
-      </div>
-      
-    </div>
-    <div *ngIf="myWallet == null">
-      <button mat-flat-button color="primary" (click)="openConnectWalletDialog()">Connect Wallet</button>
-    </div>
-
-
-  </mat-toolbar-row>
+  <!-- mobile responsive -->
+  <div fxFlex fxLayout="row" fxLayoutAlign="flex-start" fxHide.gt-xs>
+    <a mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </a>
+    <h1 class="menu-home" [routerLink]="'/'" style="cursor: pointer;">ICON Metaverse Gallery</h1>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item [routerLink]="['/galleries']">Galleries</button>
+      <button mat-menu-item [routerLink]="['/rooms']">Rooms For Rent</button>
+      <button mat-menu-item [routerLink]="['/artworks']">Artworks</button>
+      <button mat-menu-item [routerLink]="['/about']">About</button>
+    </mat-menu>
+  </div>
+  <div fxFlex fxLayout="row" fxLayoutAlign="flex-end" fxHide.gt-xs>
+    <a mat-icon-button (click)="openWalletDialog()">
+      <mat-icon>account_balance_wallet</mat-icon>
+    </a>
+  </div>
 </mat-toolbar>
+
 
 <ng-template #connectWalletDialogRef>
   <div>
@@ -34,7 +46,8 @@
     <mat-dialog-content>
 
       <div>
-        You don't have wallet. <a href="#" onclick="return false" (click)="createNewWallet()">Click here to create new wallet</a>
+        You don't have wallet. <a href="#" onclick="return false" (click)="createNewWallet()">Click here to create new
+          wallet</a>
       </div>
 
       <mat-form-field fxFlexFill class="mt-4">

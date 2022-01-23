@@ -46,7 +46,8 @@
     <div>
         <h2 mat-dialog-title>Mint Artwork</h2>
         <mat-dialog-content>
-            <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="1rem">
+            <div fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between start" fxLayoutGap="1rem" fxLayout="column"
+                fxLayoutAlign="start start">
                 <div class="mt-6">
                     <mat-form-field fxFlexFill>
                         <mat-label>Name</mat-label>

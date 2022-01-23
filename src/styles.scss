@@ -4,8 +4,8 @@ body {
 }
 body {
     margin: 0;
-    font-family: Roboto,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
-    color: rgba(0,0,0,.87);
+    font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+    color: rgba(0, 0, 0, 0.87);
 }
 
 .container {
@@ -15,18 +15,14 @@ body {
 .home {
     // margin: 2rem;
     text-align: center;
-    height: 100%;
-    background-image: url("assets/images/bg-2.png");
+    height: calc(100% - 64px);
+    background-image: url('assets/images/bg-2.png');
     background-repeat: no-repeat;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 
-
     .header {
-      
-        //min-height: 1000px;
-        //background: #3f51b5;
         height: 300px;
         color: #fff;
         padding-top: 10rem;
@@ -36,11 +32,6 @@ body {
         }
     }
 }
-
-// .mat-toolbar {
-//     z-index: 100;
-//     position: absolute;
-// }
 
 .explore {
     display: block;
@@ -57,11 +48,11 @@ body {
     // grid-template-rows: auto auto;
 }
 
-.menu-spacer {
-    margin-left: 1rem;
-}
+// .menu-spacer {
+//     margin-left: 1rem;
+// }
 
-.active{
+.active {
     background-color: #324191 !important;
 }
 
@@ -83,6 +74,10 @@ strong {
 
 .fullscreen-dialog {
     max-width: 100% !important;
+}
+
+.mat-dialog-content {
+    max-height: 80vh !important;
 }
 
 .floating-button {
@@ -148,6 +143,7 @@ mat-toolbar {
         height: 2rem;
     }
 }
+
 .mat-card-image {
     min-height: 250px;
 }
@@ -178,7 +174,6 @@ mat-toolbar {
 .small-text {
     font-size: small;
 }
-
 
 .btn-lg {
     font-size: xx-large !important;
